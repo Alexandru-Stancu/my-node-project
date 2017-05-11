@@ -9,7 +9,12 @@
   "author": "Alex S",
   "license": "ISC",
   "dependencies": {
+    "body-parser": "^1.17.1",
+    "connect-flash": "^0.1.1",
     "express": "^4.15.2",
+    "express-handlebars": "^3.0.0",
+    "express-session": "^1.15.2",
+    "express-validator": "^3.2.0",
     "mongoose": "^4.9.5"
   }
 }

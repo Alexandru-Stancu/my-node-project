@@ -1,7 +1,13 @@
 var mongoose = require('mongoose');
 
 mongoose.Promise = global.Promise;
-mongoose.connect('mongodb://localhost/test');
+mongoose.connect('mongodb://localhost/test', function(err) {
+    if (err) {
+        console.log(err);
+    } else {
+        console.log('conectat la baza de date');
+    }
+});
 var db = mongoose.connection;
 
 
@@ -23,17 +29,19 @@ var SchemaUser = mongoose.Schema({
 
 });
 
-var User = module.expors = mongoose.model('User', SchemaUser);
+var User = mongoose.model('User', SchemaUser);
 
-var newUser = new User({
-    name: 'Test',
-    username: 'usertest',
-    password: 'testpass',
-    email: 'test@exemplu.ro'
-});
+module.exports = User;
 
-newUser.save().then(function(doc) {
-    console.log('user-ul a fost salvat in baza de date', doc);
-}, function(e) {
-    console.log('eroare, nu a putut fi salvat user-ul in baza de date');
-});
+// var newUser = new User({
+//     name: 'Test',
+//     username: 'usertest',
+//     password: 'testpass',
+//     email: 'test@exemplu.ro'
+// });
+
+// newUser.save().then(function(doc) {
+//     console.log('user-ul a fost salvat in baza de date', doc);
+// }, function(e) {
+//     console.log('eroare, nu a putut fi salvat user-ul in baza de date');
+// });
