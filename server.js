@@ -7,8 +7,15 @@ var mongoose = require('mongoose');
 var expressSession = require('express-session');
 var expressValidator = require('express-validator');
 var flash = require('connect-flash');
+var passport = require('passport');
+var localPassportStrategy = require('passport-local').Strategy;
+var index = require('./rute/index');
+var users = require('./rute/users');
 
 var app = express();
+
+app.use('/', index);
+app.use('/users', users);
 
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -25,6 +32,9 @@ app.use(expressSession({
   resave: true,
   saveUninitialized: true
 }));
+
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.use(expressValidator({
   errorFormatter: function(param, msg, value) {
@@ -54,24 +64,23 @@ app.use(function (req, res, next) {
 
 
 
-app.post('/create-user', function(req, res, next) {
-  var newUser = new User();
 
-  newUser.name = req.body.name;
-  newUser.username = req.body.username;
-  newUser.password = req.body.password;
-  newUser.email = req.body.email;
+// app.post('/create-user', function(req, res, next) {
+//   var newUser = new User();
 
-  newUser.save(function(err) {
-    if (err) return next(err);
+//   newUser.name = req.body.name;
+//   newUser.username = req.body.username;
+//   newUser.password = req.body.password;
+//   newUser.email = req.body.email;
 
-    res.json('user nou a fost creat cu succes');
-  });
-});
+//   newUser.save(function(err) {
+//     if (err) return next(err);
 
-app.get('/', function (req, res) {
-  res.render('layout-principal');
-});
+//     res.json('user nou a fost creat cu succes');
+//   });
+// });
+
+
 
 app.listen(8080, function () {
   console.log('Example app listening on port 8080!');
