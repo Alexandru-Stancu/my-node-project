@@ -9,23 +9,19 @@ var expressValidator = require('express-validator');
 var flash = require('connect-flash');
 var passport = require('passport');
 var localPassportStrategy = require('passport-local').Strategy;
-var index = require('./rute/index');
-var users = require('./rute/users');
+var index = require('./routes/index');
+var users = require('./routes/users');
 
 var app = express();
 
-app.use('/', index);
-app.use('/users', users);
-
 app.use(express.static(path.join(__dirname, 'public')));
-
-app.set('views', path.join(__dirname, 'views'));
-app.engine('handlebars', exphbs({defaultLayout: 'layout-principal'}));
-app.set('view engine', 'handlebars');
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
+app.set('views', path.join(__dirname, 'views'));
+app.engine('handlebars', exphbs({defaultLayout: 'layout-principal'}));
+app.set('view engine', 'handlebars');
 
 app.use(expressSession({
   secret: 'cuvant secret pentru sesiune',
@@ -62,8 +58,8 @@ app.use(function (req, res, next) {
   next();
 });
 
-
-
+app.use('/', index);
+app.use('/users', users);
 
 // app.post('/create-user', function(req, res, next) {
 //   var newUser = new User();
@@ -79,8 +75,6 @@ app.use(function (req, res, next) {
 //     res.json('user nou a fost creat cu succes');
 //   });
 // });
-
-
 
 app.listen(8080, function () {
   console.log('Example app listening on port 8080!');
