@@ -24,14 +24,13 @@ router.post('/registration', function(req, res) {
 
   // validarea formularului
 
-req.checkBody('email', 'required').notEmpty();
-req.checkBody('email', 'valid email required').isEmail();
-req.checkBody('password', '6 to 20 characters required').len(6, 20);
-
+req.checkBody('email', 'o adresă valabilă de email este necesară').notEmpty().isEmail();
+req.checkBody('password', 'parola trebuie să conțină cel puțin 6 caractere alfanumerice').len(6, 20).isAlphaNum();
+req.checkBody('password', 'parola nu corespunde').equals(confirmPassword);
 
   req.getValidationResult().then(function(result){
     var errBoolean = result.isEmpty();
-    var errors = result.array();
+    var errors = result.mapped();
 
     if (errBoolean) {
       console.log('no errors');

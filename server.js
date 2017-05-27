@@ -49,6 +49,16 @@ app.use(expressValidator({
   }
 }));
 
+// custom validator
+
+app.use(expressValidator({
+ customValidators: {
+    isAlphaNum: function(value) {
+        return /^[a-z0-9]+$/i.test(value); 
+    }
+ }
+}));
+
 app.use(flash());
 
 app.use(function (req, res, next) {
