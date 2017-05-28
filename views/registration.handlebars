@@ -1,4 +1,10 @@
-<h3> înregistrează-te </h3>
+<h3 class="page-header"> înregistrează-te </h3>
+    {{#if errors}}
+        {{#each errors}}
+            <div class="alert alert-danger">{{msg}}</div>
+        {{/each}}
+    {{/if}}
+
 <form method="post" action="/users/registration">
 
     <div class="form-group">
@@ -27,4 +33,5 @@
     </div>
 
     <button type="submit" class="btn btn-default">submit</button>
+
 </form>

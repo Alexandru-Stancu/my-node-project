@@ -1,4 +1,6 @@
 var mongoose = require('mongoose');
+var bcrypt = require('bcryptjs');
+var jwt = require('jsonwebtoken');
 
 mongoose.Promise = global.Promise;
 mongoose.connect('mongodb://localhost/test', function(err) {
@@ -18,15 +20,38 @@ var SchemaUser = mongoose.Schema({
         index: true
     },
     username: {
-        type: String
+        type: String,
+        minlength: 4,
+        unique: true
     },
     password: {
-        type: String
+        type: String,
+        required: true,
+        minlength: 6
     },
     email: {
-        type: String
-    }
+        type: String,
+        required: true,
+        trim: true,
+        minlength: 1,
+        index: { unique: true }
+    },
+});
 
+
+SchemaUser.pre('save', function(next) {
+    var user = this;
+
+    if (user.isModified('password')) {
+        bcrypt.genSalt(10, function(err, salt) {
+            bcrypt.hash(user.password, salt, function(err, hash) {
+                user.password = hash;
+                next();
+            });
+        });
+    } else {
+        next();
+    }
 });
 
 var User = mongoose.model('User', SchemaUser);

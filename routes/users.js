@@ -1,6 +1,9 @@
 var express = require('express');
 var exphbs  = require('express-handlebars');
+var User = require('../models/user');
+var flash = require('connect-flash');
 var router = express.Router();
+
 
 router.get('/registration', function (req, res) {
   res.render('registration');
@@ -30,13 +33,32 @@ router.post('/registration', function(req, res) {
   req.checkBody('password', 'parola nu corespunde').equals(confirmPassword);
 
   // rezultatul validarii returnat ca promisiune
-  req.getValidationResult().then(function(result){
+  req.getValidationResult().then(function(result) {
     var errBoolean = result.isEmpty();
     var errors = result.mapped();
 
     if (errBoolean) {
-      console.log('no errors');
+      console.log('nu sunt erori');
+      var newUser = new User({
+        name: name,
+        username: username,
+        password: password,
+        email: email
+      });
+      newUser.save().then(function(newUser) {
+        console.log(newUser);
+      }).catch(function(e) {
+        res.status(400).send(e);
+      });
+
+      req.flash('sucess_msg', 'Ești înregistrat iar acum te poți loga!');
+
+      res.redirect('login');
+      
     } else {
+      res.render('registration', {
+        errors: errors
+      });
       console.log('erori: ', errors);
     }
 
