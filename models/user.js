@@ -15,6 +15,7 @@ var db = mongoose.connection;
 
 var SchemaUser = mongoose.Schema({
 
+
     name: {
         type: String,
         index: true
@@ -34,7 +35,7 @@ var SchemaUser = mongoose.Schema({
         required: true,
         trim: true,
         minlength: 1,
-        index: { unique: true }
+        unique: true
     },
 });
 
